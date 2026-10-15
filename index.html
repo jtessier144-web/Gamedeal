@@ -1,0 +1,424 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#070b10">
+<title>GameDeals — Bons plans jeux vidéo</title>
+<meta name="description" content="Compare les bons plans jeux vidéo sur Xbox, PlayStation, Nintendo Switch et PC.">
+<style>
+:root{
+ --bg:#070b10;--panel:#0d151e;--panel2:#111d28;
+ --border:#223341;--green:#20ed80;--white:#f4f8fc;
+ --muted:#92a4b7;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--white);
+ font:15px/1.5 system-ui,-apple-system,Arial,sans-serif}
+button,input,select{font:inherit}
+button,a{cursor:pointer}
+a{color:inherit;text-decoration:none}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{
+ outline:2px solid var(--green);outline-offset:3px
+}
+header{background:#080d13ed;border-bottom:1px solid var(--border);
+ position:sticky;top:0;z-index:10;backdrop-filter:blur(15px)}
+.top{max-width:1450px;margin:auto;padding:15px 24px;
+ display:flex;align-items:center;gap:24px}
+.brand{display:flex;align-items:center;gap:11px;min-width:220px}
+.logo{width:47px;height:47px;flex-shrink:0}
+.brand-name{font-size:25px;letter-spacing:-1px;font-weight:900;line-height:1.1}
+.brand-name span{color:var(--green)}
+.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.5px}
+.search{flex:1;position:relative}
+.search input{width:100%;padding:13px 15px 13px 42px}
+.search svg{position:absolute;left:14px;top:14px;color:var(--muted)}
+input,select{background:#101b26;color:var(--white);border:1px solid var(--border);
+ border-radius:10px;padding:11px}
+input::placeholder{color:#8294a7}
+.actions{display:flex;gap:8px}
+.btn{background:var(--panel2);color:var(--white);border:1px solid var(--border);
+ padding:10px 13px;border-radius:9px;font-weight:650}
+.btn:hover{border-color:var(--green)}
+.primary{background:var(--green);color:#03150b;border:0;font-weight:850}
+.primary:hover{background:#67ffa8}
+nav{max-width:1450px;margin:auto;padding:0 24px 13px;
+ display:flex;gap:8px;overflow-x:auto}
+.navbtn{flex:1;min-width:max-content;background:var(--panel);
+ border:1px solid var(--border);border-radius:9px;padding:11px 17px;
+ color:#c3d0dc;font-weight:650}
+.navbtn.active,.navbtn:hover{background:var(--green);color:#03150b;border-color:var(--green)}
+main{max-width:1450px;margin:auto;padding:24px}
+.hero{min-height:255px;border:1px solid #234333;border-radius:15px;
+ overflow:hidden;position:relative;display:flex;align-items:center;
+ background:radial-gradient(ellipse at 80% 50%,#17452d 0%,transparent 43%),
+ linear-gradient(110deg,#101b25,#08100f)}
+.hero-content{padding:35px;max-width:680px;position:relative;z-index:2}
+.eyebrow{font-size:12px;letter-spacing:2px;font-weight:850;color:var(--green)}
+h1{font-size:clamp(29px,4vw,45px);line-height:1.1;letter-spacing:-1.5px;margin:12px 0}
+h1 span{color:var(--green)}
+.hero p{color:#c1cfdb;max-width:540px}
+.hero-art{position:absolute;right:4%;top:0;height:100%;width:48%;
+ display:flex;align-items:center;justify-content:center;gap:12px;
+ background:linear-gradient(90deg,#08100f00,#08100f22)}
+.platform-tile{width:75px;height:85px;border:1px solid #ffffff24;
+ border-radius:12px;background:#0a111bdd;display:grid;place-items:center;
+ box-shadow:0 12px 35px #0007}
+.platform-tile svg{width:42px;height:42px}
+.note{font-size:12px;color:var(--muted);margin:13px 0}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:22px}
+.section-head{display:flex;align-items:center;justify-content:space-between;
+ gap:12px;margin:28px 0 15px}
+h2{font-size:21px;margin:0}
+.section-head a{color:var(--green);font-size:13px}
+.toolbar{display:flex;gap:10px;margin-bottom:14px}
+.toolbar input{flex:1;min-width:0}
+.toolbar select{max-width:230px}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.card{min-width:0;background:var(--panel);border:1px solid var(--border);
+ border-radius:12px;overflow:hidden;transition:transform .2s,border-color .2s}
+.card:hover{transform:translateY(-3px);border-color:#329b60}
+.cover{height:150px;position:relative;background:#111e29;overflow:hidden}
+.cover img{width:100%;height:100%;object-fit:cover;display:block;
+ transition:transform .25s}
+.card:hover .cover img{transform:scale(1.04)}
+.cover-fallback{height:100%;display:grid;place-items:center;font-size:22px;
+ font-weight:900;letter-spacing:1px;color:#b9c8d6;
+ background:linear-gradient(135deg,#152c25,#172138)}
+.discount{position:absolute;top:9px;left:9px;background:var(--green);
+ color:#06160b;font-size:12px;font-weight:900;padding:4px 7px;border-radius:5px}
+.heart{position:absolute;right:9px;top:9px;width:33px;height:33px;
+ display:grid;place-items:center;border:1px solid #ffffff40;border-radius:50%;
+ background:#061018d9;color:white}
+.heart.saved{color:var(--green);border-color:var(--green)}
+.card-body{padding:12px}
+.platform{font-size:11px;color:var(--muted)}
+.card h3{font-size:14px;margin:5px 0;min-height:42px;line-height:1.45}
+.prices{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin:11px 0}
+.old{font-size:12px;color:#8291a1;text-decoration:line-through}
+.price{font-size:19px;color:var(--green);font-weight:900}
+.offer{display:block;text-align:center;background:var(--green);color:#04140a;
+ border-radius:8px;padding:9px;font-size:12px;font-weight:850}
+.offer:hover{background:#72ffac}
+aside{display:flex;flex-direction:column;gap:15px}
+.sidebox{background:var(--panel);border:1px solid var(--border);
+ border-radius:12px;padding:17px}
+.sidebox h3{font-size:16px;margin:0 0 15px}
+.sidebox label{display:flex;gap:10px;align-items:center;margin:12px 0;
+ color:#c4d0db;font-size:13px}
+.sidebox input[type=checkbox]{accent-color:var(--green);width:16px;height:16px}
+.sidebox select{width:100%;margin-top:7px}
+.sidebox hr{border:0;border-top:1px solid var(--border);margin:17px 0}
+.stats{display:flex;justify-content:space-between;padding:11px 0;
+ border-bottom:1px solid var(--border);font-size:13px}
+.stats strong{color:var(--green)}
+.top-deal{display:flex;align-items:center;gap:10px;padding:10px 0;
+ border-bottom:1px solid var(--border)}
+.top-deal:last-child{border-bottom:0}
+.top-deal img{width:65px;height:45px;object-fit:cover;border-radius:5px}
+.top-deal div{font-size:12px}
+.top-deal strong{display:block;color:var(--green);margin-top:3px}
+.empty{grid-column:1/-1;text-align:center;padding:45px 15px;
+ border:1px solid var(--border);border-radius:12px;color:var(--muted)}
+footer{margin-top:42px;border-top:1px solid var(--border);padding:28px 20px;
+ text-align:center;color:var(--muted);font-size:12px}
+footer .brand-name{font-size:20px;display:inline-block;margin-bottom:12px}
+footer a{color:#dce7f1;text-decoration:underline}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+ background:#10271a;border:1px solid var(--green);padding:12px 20px;
+ border-radius:10px;z-index:30;display:none}
+@media(max-width:1000px){
+ .layout{grid-template-columns:1fr}
+ aside{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .hero-art{right:0;width:42%}
+ .cards{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .brand{min-width:auto}
+}
+@media(max-width:650px){
+ .top{padding:12px;gap:10px;flex-wrap:wrap}
+ .brand-name{font-size:22px}
+ .brand small{font-size:9px}
+ .logo{width:40px;height:40px}
+ .search{order:3;flex-basis:100%}
+ .actions{margin-left:auto}
+ .actions .btn{font-size:12px;padding:9px}
+ nav{padding:0 12px 12px}
+ main{padding:13px}
+ .hero{min-height:235px}
+ .hero-content{padding:23px}
+ .hero-art{opacity:.18;width:100%;right:-20%}
+ .platform-tile{width:52px;height:58px}
+ .platform-tile svg{width:30px;height:30px}
+ .cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .cover{height:115px}
+ .card-body{padding:9px}
+ .card h3{font-size:13px;min-height:38px}
+ .price{font-size:17px}
+ .toolbar{flex-wrap:wrap}
+ .toolbar select{max-width:none;flex:1}
+ aside{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="top">
+  <a href="#" class="brand" aria-label="GameDeals, accueil">
+   <svg class="logo" viewBox="0 0 64 64" role="img" aria-label="Logo GameDeals">
+    <path d="M17 14H47L59 28L54 48Q52 55 45 51L32 42L19 51Q12 55 10 47L5 29Z"
+     fill="#20ed80"/>
+    <path d="M17 14L29 5H47L39 14Z" fill="#f4f8fc"/>
+    <path d="M17 24V36M11 30H23" stroke="#07100c" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="43" cy="27" r="3" fill="#07100c"/>
+    <circle cx="49" cy="33" r="3" fill="#07100c"/>
+   </svg>
+   <span><span class="brand-name">Game<span>Deals</span></span>
+   <small>LES MEILLEURES OFFRES, TOUS LES JEUX</small></span>
+  </a>
+  <div class="search">
+   <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+    <circle cx="10.5" cy="10.5" r="7"></circle><path d="m16 16 5 5"></path>
+   </svg>
+   <input id="search" type="search" placeholder="Rechercher un jeu, une plateforme..." aria-label="Rechercher un jeu">
+  </div>
+  <div class="actions">
+   <button class="btn" id="favoritesBtn">♡ Favoris</button>
+   <button class="btn" id="allBtn">Tous les jeux</button>
+  </div>
+ </div>
+ <nav id="nav" aria-label="Plateformes">
+  <button class="navbtn active" data-platform="Tous">Tous les jeux</button>
+  <button class="navbtn" data-platform="Xbox">Xbox</button>
+  <button class="navbtn" data-platform="PlayStation">PlayStation</button>
+  <button class="navbtn" data-platform="Switch">Nintendo Switch</button>
+  <button class="navbtn" data-platform="Steam">Steam</button>
+  <button class="navbtn" data-platform="PC">PC</button>
+ </nav>
+</header>
+
+<main>
+ <section class="hero">
+  <div class="hero-content">
+   <div class="eyebrow">LE COMPARATEUR GAMING</div>
+   <h1>Les meilleures offres<br>sur vos <span>jeux préférés.</span></h1>
+   <p>Xbox, PlayStation, Nintendo Switch, Steam et PC. Retrouve tes jeux et compare les offres au même endroit.</p>
+   <button class="btn primary" onclick="document.getElementById('catalogue').scrollIntoView({behavior:'smooth'})">
+    Voir les offres
+   </button>
+  </div>
+  <div class="hero-art" aria-hidden="true">
+   <div class="platform-tile">
+    <svg viewBox="0 0 48 48" fill="#20ed80"><path d="M9 15h30a5 5 0 0 1 5 5l-3 15a4 4 0 0 1-6 2l-7-6h-8l-7 6a4 4 0 0 1-6-2L4 20a5 5 0 0 1 5-5Z"/><path d="M13 21v10m-5-5h10" stroke="#06140b" stroke-width="3"/><circle cx="33" cy="23" r="2.5" fill="#06140b"/><circle cx="37" cy="28" r="2.5" fill="#06140b"/></svg>
+   </div>
+   <div class="platform-tile">
+    <svg viewBox="0 0 48 48" fill="none" stroke="#168dff" stroke-width="4"><path d="M9 12v25L19 31V17l19 21V13L28 19v12L9 12Z"/></svg>
+   </div>
+   <div class="platform-tile">
+    <svg viewBox="0 0 48 48" fill="#ff3453"><rect x="7" y="4" width="34" height="40" rx="7"/><path d="M16 10v11m-5-5.5h10" stroke="#081018" stroke-width="3"/><circle cx="32" cy="14" r="3" fill="#081018"/><circle cx="32" cy="22" r="3" fill="#081018"/><path d="M24 4v40" stroke="#081018" stroke-width="2"/></svg>
+   </div>
+   <div class="platform-tile">
+    <svg viewBox="0 0 48 48" fill="none" stroke="#e4edf5" stroke-width="4"><circle cx="24" cy="24" r="19"/><circle cx="16" cy="28" r="6"/><circle cx="34" cy="16" r="7"/><path d="m21 25 10-7"/></svg>
+   </div>
+  </div>
+ </section>
+
+ <p class="note">Démonstration : les prix et réductions affichés sont indicatifs et ne sont pas actualisés automatiquement.</p>
+
+ <div class="section-head" id="catalogue">
+  <h2 id="heading">Promotions du moment</h2>
+  <span id="count" class="note"></span>
+ </div>
+
+ <div class="layout">
+  <section>
+   <div class="toolbar">
+    <input id="maxPrice" type="number" min="0" placeholder="Prix maximum (€)" aria-label="Prix maximum">
+    <select id="sort" aria-label="Trier les résultats">
+     <option value="discount">Plus grosse réduction</option>
+     <option value="price">Prix croissant</option>
+     <option value="priceDesc">Prix décroissant</option>
+     <option value="name">Nom A à Z</option>
+    </select>
+   </div>
+   <div class="cards" id="cards"></div>
+  </section>
+
+  <aside>
+   <section class="sidebox">
+    <h3>Filtres</h3>
+    <strong style="font-size:12px">Plateformes</strong>
+    <label><input type="checkbox" class="platformFilter" value="Xbox"> Xbox</label>
+    <label><input type="checkbox" class="platformFilter" value="PlayStation"> PlayStation</label>
+    <label><input type="checkbox" class="platformFilter" value="Switch"> Nintendo Switch</label>
+    <label><input type="checkbox" class="platformFilter" value="Steam"> Steam</label>
+    <label><input type="checkbox" class="platformFilter" value="PC"> PC</label>
+    <hr>
+    <label for="minDiscount">Réduction minimum</label>
+    <select id="minDiscount">
+     <option value="0">Toutes les réductions</option>
+     <option value="20">20 % minimum</option>
+     <option value="40">40 % minimum</option>
+     <option value="60">60 % minimum</option>
+    </select>
+    <button class="btn primary" id="reset" style="width:100%;margin-top:15px">Réinitialiser les filtres</button>
+   </section>
+   <section class="sidebox">
+    <h3>Meilleures réductions</h3>
+    <div id="topDeals"></div>
+   </section>
+   <section class="sidebox">
+    <h3>Ton espace</h3>
+    <div class="stats"><span>Résultats</span><strong id="total">0</strong></div>
+    <div class="stats"><span>Favoris enregistrés</span><strong id="favCount">0</strong></div>
+    <p style="font-size:12px;color:var(--muted)">Tes favoris sont sauvegardés dans ce navigateur.</p>
+   </section>
+  </aside>
+ </div>
+</main>
+
+<footer>
+ <div class="brand-name">Game<span style="color:var(--green)">Deals</span></div>
+ <div>Joue plus. Dépense moins.</div>
+ <p>Les marques et visuels de jeux appartiennent à leurs propriétaires respectifs.</p>
+ <p>
+  <a href="https://store.steampowered.com/" target="_blank" rel="noopener">Steam</a> ·
+  <a href="https://www.xbox.com/fr-FR/games/all-games" target="_blank" rel="noopener">Xbox</a> ·
+  <a href="https://store.playstation.com/fr-fr/pages/latest" target="_blank" rel="noopener">PlayStation</a> ·
+  <a href="https://www.nintendo.com/fr-fr/" target="_blank" rel="noopener">Nintendo</a>
+ </p>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const games=[
+ {name:"Cyberpunk 2077",platform:"Steam",id:1091500,price:23.99,old:59.99},
+ {name:"Red Dead Redemption 2",platform:"Steam",id:1174180,price:19.79,old:59.99},
+ {name:"Hogwarts Legacy",platform:"Steam",id:990080,price:17.99,old:59.99},
+ {name:"Elden Ring",platform:"Steam",id:1245620,price:35.99,old:59.99},
+ {name:"Stardew Valley",platform:"Steam",id:413150,price:11.99,old:19.99},
+ {name:"The Witcher 3",platform:"Steam",id:292030,price:17.99,old:49.99},
+ {name:"Forza Horizon 5",platform:"Steam",id:1551360,price:39.99,old:59.99},
+ {name:"Baldur's Gate 3",platform:"Steam",id:1086940,price:47.99,old:59.99},
+ {name:"Resident Evil 4",platform:"Steam",id:2050650,price:19.99,old:39.99},
+ {name:"EA Sports FC 25",platform:"PlayStation",id:0,price:39.99,old:79.99},
+ {name:"God of War Ragnarök",platform:"PlayStation",id:0,price:34.99,old:69.99},
+ {name:"Marvel's Spider-Man 2",platform:"PlayStation",id:0,price:39.99,old:79.99},
+ {name:"Gran Turismo 7",platform:"PlayStation",id:0,price:38.99,old:59.99},
+ {name:"Call of Duty Black Ops 6",platform:"Xbox",id:0,price:43.99,old:79.99},
+ {name:"Starfield",platform:"Xbox",id:0,price:35.99,old:69.99},
+ {name:"Halo Infinite",platform:"Xbox",id:0,price:29.99,old:59.99},
+ {name:"Minecraft",platform:"PC",id:0,price:19.49,old:29.99},
+ {name:"Zelda: Tears of the Kingdom",platform:"Switch",id:0,price:45.99,old:69.99},
+ {name:"Mario Kart 8 Deluxe",platform:"Switch",id:0,price:35.99,old:59.99},
+ {name:"Animal Crossing: New Horizons",platform:"Switch",id:0,price:35.99,old:59.99}
+].map(g=>({...g,discount:Math.round((1-g.price/g.old)*100)}));
+
+const $=id=>document.getElementById(id);
+let platform="Tous";
+let onlyFav=false;
+let favorites=[];
+try{favorites=JSON.parse(localStorage.getItem("gd-favorites")||"[]")}catch(e){favorites=[]}
+
+function imageUrl(g){
+ return g.id ? `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${g.id}/header.jpg` : "";
+}
+function storeUrl(g){
+ const q=encodeURIComponent(g.name);
+ if(g.platform==="Steam")return "https://store.steampowered.com/search/?term="+q;
+ if(g.platform==="Xbox")return "https://www.xbox.com/fr-FR/search?q="+q;
+ if(g.platform==="PlayStation")return "https://store.playstation.com/fr-fr/search/"+q;
+ if(g.platform==="Switch")return "https://www.nintendo.com/fr-fr/search/#q="+q;
+ return "https://www.google.com/search?q="+q+"+jeu+PC+prix";
+}
+function saveFavorites(){
+ try{localStorage.setItem("gd-favorites",JSON.stringify(favorites))}catch(e){}
+}
+function render(){
+ const query=$("search").value.trim().toLocaleLowerCase("fr");
+ const max=$("maxPrice").value===""?Infinity:Number($("maxPrice").value);
+ const min=Number($("minDiscount").value);
+ const selected=[...document.querySelectorAll(".platformFilter:checked")].map(x=>x.value);
+ let list=games.filter(g=>
+  (platform==="Tous"||g.platform===platform)&&
+  (!selected.length||selected.includes(g.platform))&&
+  g.name.toLocaleLowerCase("fr").includes(query)&&
+  g.price<=max&&g.discount>=min&&
+  (!onlyFav||favorites.includes(g.name))
+ );
+ const sort=$("sort").value;
+ if(sort==="discount")list.sort((a,b)=>b.discount-a.discount);
+ if(sort==="price")list.sort((a,b)=>a.price-b.price);
+ if(sort==="priceDesc")list.sort((a,b)=>b.price-a.price);
+ if(sort==="name")list.sort((a,b)=>a.name.localeCompare(b.name,"fr"));
+
+ $("heading").textContent=onlyFav?"Mes favoris":
+  platform==="Tous"?"Promotions du moment":"Offres "+platform;
+ $("count").textContent=list.length+" jeu(x)";
+ $("total").textContent=list.length;
+ $("favCount").textContent=favorites.length;
+
+ $("cards").innerHTML=list.length?list.map((g,i)=>`
+ <article class="card">
+  <div class="cover">
+   ${imageUrl(g)?`<img src="${imageUrl(g)}" alt="Visuel de ${g.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">`:""}
+   <div class="cover-fallback" style="display:${imageUrl(g)?"none":"grid"}">${g.name}</div>
+   <span class="discount">-${g.discount}%</span>
+   <button class="heart ${favorites.includes(g.name)?"saved":""}" data-fav="${i}" aria-label="${favorites.includes(g.name)?"Retirer des":"Ajouter aux"} favoris">${favorites.includes(g.name)?"♥":"♡"}</button>
+  </div>
+  <div class="card-body">
+   <div class="platform">${g.platform}</div>
+   <h3>${g.name}</h3>
+   <div class="prices"><span class="old">${g.old.toFixed(2).replace(".",",")} €</span>
+   <span class="price">${g.price.toFixed(2).replace(".",",")} €</span></div>
+   <a class="offer" href="${storeUrl(g)}" target="_blank" rel="noopener noreferrer">Consulter la boutique</a>
+  </div>
+ </article>`).join(""):`<div class="empty">Aucun jeu trouvé. Modifie tes filtres ou ta recherche.</div>`;
+
+ $("topDeals").innerHTML=[...games].sort((a,b)=>b.discount-a.discount).slice(0,5).map(g=>`
+ <a class="top-deal" href="${storeUrl(g)}" target="_blank" rel="noopener noreferrer">
+  ${imageUrl(g)?`<img src="${imageUrl(g)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`:""}
+  <div>${g.name}<strong>-${g.discount}% · ${g.price.toFixed(2).replace(".",",")} €</strong></div>
+ </a>`).join("");
+
+ document.querySelectorAll(".navbtn").forEach(b=>
+  b.classList.toggle("active",b.dataset.platform===platform));
+ document.querySelectorAll("[data-fav]").forEach(b=>b.addEventListener("click",()=>{
+  const g=list[Number(b.dataset.fav)];
+  if(!g)return;
+  favorites=favorites.includes(g.name)?favorites.filter(n=>n!==g.name):[...favorites,g.name];
+  saveFavorites();render();
+  toast(favorites.includes(g.name)?"Jeu ajouté aux favoris":"Jeu retiré des favoris");
+ }));
+}
+function toast(message){
+ $("toast").textContent=message;
+ $("toast").style.display="block";
+ clearTimeout(window.toastTimer);
+ window.toastTimer=setTimeout(()=>$("toast").style.display="none",2000);
+}
+$("nav").addEventListener("click",e=>{
+ const b=e.target.closest("[data-platform]");
+ if(!b)return;
+ platform=b.dataset.platform;onlyFav=false;render();
+});
+["search","maxPrice","sort","minDiscount"].forEach(id=>
+ $(id).addEventListener("input",render));
+document.querySelectorAll(".platformFilter").forEach(el=>
+ el.addEventListener("change",render));
+$("favoritesBtn").addEventListener("click",()=>{onlyFav=!onlyFav;render()});
+$("allBtn").addEventListener("click",()=>{
+ platform="Tous";onlyFav=false;
+ $("search").value="";render();
+});
+$("reset").addEventListener("click",()=>{
+ platform="Tous";onlyFav=false;
+ $("search").value="";$("maxPrice").value="";
+ $("minDiscount").value="0";$("sort").value="discount";
+ document.querySelectorAll(".platformFilter").forEach(el=>el.checked=false);
+ render();toast("Filtres réinitialisés");
+});
+render();
+</script>
+</body>
+</html>
